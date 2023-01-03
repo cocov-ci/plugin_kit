@@ -1,0 +1,17 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "bundler/setup"
+require "plugin_kit"
+
+if ARGV.empty?
+  puts "Usage: bin/run FILE"
+  exit 1
+end
+
+ENV["COCOV_OUTPUT_FILE"] = "/app/cocov.output.bin"
+ENV["COCOV_WORKDIR"] = "/app"
+ENV["COCOV_REPO_NAME"] = "dummy"
+ENV["COCOV_COMMIT_SHA"] = "0000000000000000000000000000"
+
+require Pathname.new(Dir.pwd).join(ARGV.shift)

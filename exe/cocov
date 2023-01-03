@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "cocov/plugin_kit"
+
+if ARGV.empty?
+  puts "Usage: cocov FILE"
+  exit 1
+end
+
+require Pathname.new(Dir.pwd).join(ARGV.shift)

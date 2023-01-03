@@ -1,0 +1,13 @@
+version: "3.9"
+services:
+  ruby:
+    image: ruby:2.6
+    volumes:
+      - .:/app
+      - bundle:/usr/local/bundle
+      - root_home:/root
+      - ./support/.irbrc:/root/.irbrc:ro
+    working_dir: /app
+volumes:
+  bundle:
+  root_home:
