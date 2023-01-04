@@ -29,7 +29,7 @@ module Cocov
 
       ALLOWED_KINDS = %i[style performance security bug complexity duplication].freeze
 
-      def emit_problem(kind:, file:, line_start:, line_end:, message:, uid: nil)
+      def emit_issue(kind:, file:, line_start:, line_end:, message:, uid: nil)
         unless ALLOWED_KINDS.include? kind
           raise ArgumentError, "Invalid kind `#{kind}'. Valid options are #{ALLOWED_KINDS.join(", ")}"
         end

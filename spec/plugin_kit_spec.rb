@@ -28,7 +28,7 @@ RSpec.describe Cocov::PluginKit do
     it "writes output to the provided path" do
       expect do
         subject.run do
-          emit_problem(kind: :bug, file: "f", line_start: 1, line_end: 1, message: "boom")
+          emit_issue(kind: :bug, file: "f", line_start: 1, line_end: 1, message: "boom")
         end
       end.to raise_error(SystemExit) do |error|
         expect(error.status).to eq 0
