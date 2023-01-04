@@ -27,7 +27,8 @@ module Cocov
         Digest::SHA1.hexdigest(data)
       end
 
-      ALLOWED_KINDS = %i[style performance security bug complexity duplication].freeze
+      # :nodoc:
+      ALLOWED_KINDS = %i[style performance security bug complexity duplication convention].freeze
 
       def emit_issue(kind:, file:, line_start:, line_end:, message:, uid: nil)
         unless ALLOWED_KINDS.include? kind
