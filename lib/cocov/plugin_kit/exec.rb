@@ -2,10 +2,15 @@
 
 module Cocov
   module PluginKit
+    # Exec provides utilities for executing processes and obtaining its results.
     module Exec
+      # ExecutionError is thrown when an #exec or #exec2 procedure fails. It
+      # includes the captured stdout and stderr streams, along with the exit
+      # status, the original command and its environment.
       class ExecutionError < StandardError
         attr_reader :stdout, :stderr, :status, :cmd, :env
 
+        # Internal: Initializes a new ExecutionError instance
         def initialize(status, stdout, stderr, cmd, env)
           super("Process #{cmd.split.first} exited with status #{status}")
           @status = status
@@ -18,6 +23,19 @@ module Cocov
 
       module_function
 
+      # Public: Executes a given command (represented as an array of strings),
+      # returning both its stdout and stderr streams as Strings. Extra options
+      # are passed directly to Process.spawn, except :env, which when provided
+      # must be a Hash representing environment keys and values.
+      # This function will block until the process finishes, either returning
+      # both streams (stdout, stderr) as an Array, or raising an ExecutionError.
+      #
+      # Example:
+      #
+      #   stdout, stderr = Exec::exec2(["git", "version"], chdir: "/tmp")
+      #   # stdout == "git version 2.30.2\n"
+      #   # stderr == ""
+      #
       def exec2(cmd, **options)
         out_reader, out_writer = IO.pipe
         err_reader, err_writer = IO.pipe
@@ -62,6 +80,9 @@ module Cocov
         [stdout, stderr]
       end
 
+      # Public: exec works exactly like #exec2, but only returns the stdout
+      # stream, instead of both stdout and stderr.
+      # For more information, see the documentation for #exec.
       def exec(cmd, **options)
         exec2(cmd, **options).first
       end

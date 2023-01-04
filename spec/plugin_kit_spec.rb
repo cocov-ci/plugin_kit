@@ -26,23 +26,18 @@ RSpec.describe Cocov::PluginKit do
     end
 
     it "writes output to the provided path" do
-      expect do
-        subject.run do
-          emit_issue(kind: :bug, file: "f", line_start: 1, line_end: 1, message: "boom")
+      expect { subject.run { emit_issue(kind: :bug, file: "f", line_start: 1, line_end: 1, message: "boom") } }
+        .to raise_error(SystemExit) do |error|
+          expect(error.status).to eq 0
         end
-      end.to raise_error(SystemExit) do |error|
-        expect(error.status).to eq 0
-      end
 
-      expect(File.read(output_file).to_s).to eq "{\"kind\":\"bug\",\"file\":\"f\",\"line_start\":1,\"line_end\":1,\"message\":\"boom\",\"uid\":\"ce618f566e6637885e1e33c10d092822bb8cb033\"}\u0000"
+      expect(File.read(output_file).to_s)
+        .to eq "{\"kind\":\"bug\",\"file\":\"f\",\"line_start\":1," \
+               "\"line_end\":1,\"message\":\"boom\",\"uid\":\"ce618f566e6637885e1e33c10d092822bb8cb033\"}\u0000"
     end
 
     it "exits with error" do
-      expect do
-        subject.run do
-          bla
-        end
-      end.to raise_error(SystemExit) do |error|
+      expect { subject.run { bla } }.to raise_error(SystemExit) do |error|
         expect(error.status).to eq 1
       end
     end

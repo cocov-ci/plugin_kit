@@ -53,7 +53,9 @@ RSpec.describe Cocov::PluginKit::Run do
     it "emits to output when valid" do
       subject.emit_issue(**opts)
       output.rewind
-      expect(output.string).to eq "{\"kind\":\"bug\",\"file\":\"f\",\"line_start\":1,\"line_end\":1,\"message\":\"foo\",\"uid\":\"3f8f97ddda0b4388bd278778f9ef07296af52c6e\"}\u0000"
+      expect(output.string).to eq "{\"kind\":\"bug\",\"file\":\"f\"," \
+                                  "\"line_start\":1,\"line_end\":1,\"message\":" \
+                                  "\"foo\",\"uid\":\"3f8f97ddda0b4388bd278778f9ef07296af52c6e\"}\u0000"
     end
   end
 end

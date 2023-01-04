@@ -12,11 +12,17 @@ require_relative "plugin_kit/run"
 require_relative "plugin_kit/exec"
 
 module Cocov
+  # PluginKit implements helpers for implementing Cocov Plugins in Ruby. The
+  # main module provides a single run function that must be used to wrap the
+  # plugin runtime, and is responsible for preparing the environment and running
+  # the provided block
   module PluginKit
-    class Error < StandardError; end
-
     module_function
 
+    # Public: Prepares the environment and executes a given `klass` (Class) or
+    # a single block. When `klass` is not provided, PluginKit::Run is used.
+    # When providing a custom class, make sure to inherit PluginKit::Run.
+    # For examples, see the library's README file.
     def run(klass = nil, &block)
       output_file = File.open(ENV.fetch("COCOV_OUTPUT_FILE"), "w")
       exit_code = 0

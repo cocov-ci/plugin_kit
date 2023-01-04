@@ -2,6 +2,15 @@ AllCops:
   TargetRubyVersion: 2.6
   NewCops: enable
 
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
+
+Metrics/ParameterLists:
+  Enabled: false
+
 Style/StringLiterals:
   Enabled: true
   EnforcedStyle: double_quotes
@@ -12,3 +21,13 @@ Style/StringLiteralsInInterpolation:
 
 Layout/LineLength:
   Max: 120
+  Exclude:
+    - plugin_kit.gemspec
+
+Metrics/BlockLength:
+  Exclude:
+    - spec/**/*.rb
+
+Lint/RescueException:
+  Exclude:
+    - lib/cocov/plugin_kit.rb
