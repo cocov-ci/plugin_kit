@@ -1,33 +1,69 @@
 # PluginKit
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/plugin_kit`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+PluginKit implements a utility library to help the development of Cocov Plugins using the Ruby programming language.
 
 ## Installation
 
-Install the gem and add to the application's Gemfile by executing:
+Cocov plugins should not contain Gemfiles. Instead, install the library directly
+using the `gem install` command, providing a specific version. For instance,
 
-    $ bundle add plugin_kit
-
-If bundler is not being used to manage dependencies, install the gem by executing:
-
-    $ gem install plugin_kit
+```
+gem install cocov_plugin_kit -v 0.1.2
+```
 
 ## Usage
 
-TODO: Write usage instructions here
+### For simple plugins
+
+When implementing simple plugins, like for example, [brakeman](https://github.com/cocov-ci/brakeman/blob/master/plugin.rb),
+the block-based usage of PluginKit can be used:
+
+```ruby
+Cocov::PluginKit.run do
+  output = JSON.parse(exec(["my", "plugin", "--format", "json"], env: ENV))
+  # Process output...
+  emit_issue kind: # ...
+end
+```
+
+### For elaborate plugins
+
+For plugins requiring more organization or several internal methods, like [rubocop](https://github.com/cocov-ci/rubocop/blob/master/plugin.rb),
+`Cocov::PluginKit::Run` can be inherited into a new class, and `#run` can be
+overridden to be used as the plugin entrypoint, followed by a call to
+`Cocov::PluginKit.run`:
+
+```ruby
+class ElaboratePlugin < Cocov::PluginKit::Run
+  def run
+    output = JSON.parse(exec(["my", "plugin", "--format", "json"], env: ENV))
+    # Process output...
+    emit_issue kind: # ...
+  end
+end
+
+Cocov::PluginKit.run(ElaboratePlugin)
+```
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+A `docker-compose.yaml` is provided for allowing Ruby 2.6 to be used without
+requiring developers to install that version on their machines. When writing
+Dockerfiles, developers are advised to use the latest version available when
+building plugins.
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+Use `docker compose run --rm -it ruby bash` to get a shell on the container;
+`bin/setup` can be used to install dependencies, `rspec` to run tests,
+`rubocop` to lint the codebase, and `bin/console` to get an interactive console
+that allows you to experiment.
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/plugin_kit. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/plugin_kit/blob/master/CODE_OF_CONDUCT.md).
+Bug reports and pull requests are welcome on GitHub at https://github.com/cocov-ci/plugin_kit.
+This project is intended to be a safe, welcoming space for collaboration, and
+contributors are expected to adhere to the [Cocov's code of conduct](https://github.com/cocov-ci/.github/blob/main/CODE_OF_CONDUCT.md).
 
 ## Code of Conduct
 
-Everyone interacting in the PluginKit project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/plugin_kit/blob/master/CODE_OF_CONDUCT.md).
+Everyone interacting in the Cocov project's codebases, issue trackers, chat rooms
+and mailing lists is expected to follow the [Cocov's code of conduct](https://github.com/cocov-ci/.github/blob/main/CODE_OF_CONDUCT.md).
