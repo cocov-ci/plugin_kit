@@ -31,3 +31,6 @@ Metrics/BlockLength:
 Lint/RescueException:
   Exclude:
     - lib/cocov/plugin_kit.rb
+
+Layout/FirstHashElementIndentation:
+  EnforcedStyle: consistent

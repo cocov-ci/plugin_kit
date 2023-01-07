@@ -8,8 +8,9 @@ require "tempfile"
 require "tmpdir"
 
 require_relative "plugin_kit/version"
-require_relative "plugin_kit/run"
 require_relative "plugin_kit/exec"
+require_relative "plugin_kit/realloc"
+require_relative "plugin_kit/run"
 
 module Cocov
   # PluginKit implements helpers for implementing Cocov Plugins in Ruby. The
@@ -29,6 +30,7 @@ module Cocov
       klass ||= Run
       instance = klass.new(output_file)
       Dir.chdir(instance.workdir) do
+        Realloc.mounts!
         if block_given?
           instance.instance_exec(&block)
         else

@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 
 require "bundler/setup"
-require "plugin_kit"
+require "cocov/plugin_kit"
 
 if ARGV.empty?
   puts "Usage: bin/run FILE"
