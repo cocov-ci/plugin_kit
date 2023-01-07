@@ -25,6 +25,12 @@ module Cocov
     # When providing a custom class, make sure to inherit PluginKit::Run.
     # For examples, see the library's README file.
     def run(klass = nil, &block)
+      if Process.uid != 1000 && !ENV.key?("COCOV_DEVELOPMENT")
+        puts "Initialization failed: Cocov plugins must run as uid 1000. " \
+             "For more information, please refer to the documentation"
+        exit 2
+      end
+
       output_file = File.open(ENV.fetch("COCOV_OUTPUT_FILE"), "w")
       exit_code = 0
       klass ||= Run

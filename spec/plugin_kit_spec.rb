@@ -2,6 +2,12 @@
 
 RSpec.describe Cocov::PluginKit do
   subject { described_class }
+  around do |spec|
+    ENV["COCOV_DEVELOPMENT"] = "true"
+    spec.run
+  ensure
+    ENV.delete("COCOV_DEVELOPMENT")
+  end
 
   it "has a version number" do
     expect(Cocov::PluginKit::VERSION).not_to be nil

@@ -31,7 +31,8 @@ RSpec.describe Cocov::PluginKit::Run do
 
     [
       ["kind", { kind: :foo },
-       "Invalid kind `foo'. Valid options are style, performance, security, bug, complexity, duplication, convention, quality"],
+       "Invalid kind `foo'. Valid options are style, performance, security, bug, " \
+       "complexity, duplication, convention, quality"],
       ["file type", { file: 1 }, "file must be a non-empty string"],
       ["file presence", { file: "   " }, "file must be a non-empty string"],
       ["line_start type", { line_start: "foo" }, "line_start must be an integer greater than zero"],
