@@ -8,6 +8,7 @@ RSpec.describe Cocov::PluginKit::Exec do
     it "returns stdout and stderr" do
       stdout, stderr = subject.exec2("#{helper_path} --foo --bar --baz",
                                      env: { EXEC_HELPER_TEST: true, PATH: ENV.fetch("PATH", nil) },
+                                     isolate_env: true,
                                      chdir: "/tmp")
 
       out = JSON.parse(stdout)
@@ -16,6 +17,7 @@ RSpec.describe Cocov::PluginKit::Exec do
       expect(out["pwd"]).to eq "/tmp"
       expect(out["env"]["EXEC_HELPER_TEST"]).to eq "true"
       expect(out["env"]).to have_key "PATH"
+      expect(out["env"].keys).to eq %w[EXEC_HELPER_TEST PATH]
       expect(err).to eq({ "stderr" => true })
     end
 

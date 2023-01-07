@@ -12,7 +12,7 @@ module Cocov
 
         # Internal: Initializes a new ExecutionError instance
         def initialize(status, stdout, stderr, cmd, env)
-          super("Process #{cmd.split.first} exited with status #{status}")
+          super("Process #{cmd.split.first} exited with status #{status}: #{stdout}\n#{stderr}")
           @status = status
           @stdout = stdout
           @stderr = stderr
@@ -25,8 +25,11 @@ module Cocov
 
       # Public: Executes a given command (represented as an array of strings),
       # returning both its stdout and stderr streams as Strings. Extra options
-      # are passed directly to Process.spawn, except :env, which when provided
-      # must be a Hash representing environment keys and values.
+      # are passed directly to Process.spawn, except:
+      # -         env: when provided must be a Hash representing environment
+      #                keys and values.
+      # - isolate_env: Prevents the current ENV from being copied into the new
+      #                process. Just a fancier name to :unsetenv_others
       # This function will block until the process finishes, either returning
       # both streams (stdout, stderr) as an Array, or raising an ExecutionError.
       #
@@ -40,11 +43,12 @@ module Cocov
         out_reader, out_writer = IO.pipe
         err_reader, err_writer = IO.pipe
 
+        isolate = options.delete(:isolate_env) == true
         env = (options.delete(:env) || {}).to_h { |*a| a.map(&:to_s) }
         options.delete(:chdir) if options.fetch(:chdir, nil).nil?
 
         opts = {
-          unsetenv_others: true,
+          unsetenv_others: isolate,
           out: out_writer.fileno,
           err: err_writer.fileno
         }.merge options
