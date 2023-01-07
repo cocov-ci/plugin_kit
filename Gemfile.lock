@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    cocov_plugin_kit (0.1.3)
+    cocov_plugin_kit (0.1.4)
 
 GEM
   remote: https://rubygems.org/

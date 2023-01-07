@@ -45,7 +45,7 @@ module Cocov
       end
 
       # :nodoc:
-      ALLOWED_KINDS = %i[style performance security bug complexity duplication convention].freeze
+      ALLOWED_KINDS = %i[style performance security bug complexity duplication convention quality].freeze
 
       # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
